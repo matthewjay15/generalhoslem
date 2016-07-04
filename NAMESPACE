@@ -1,0 +1,3 @@
+exportPattern("^[[:alpha:]]+")
+importFrom(stats, pchisq, quantile, xtabs, contrasts)
+importFrom(reshape, melt, cast)
