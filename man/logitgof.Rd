@@ -5,13 +5,23 @@
 \usage{logitgof(obs, exp, g = 10)}
 \arguments{
   \item{obs}{ a vector of observed values. See details.}
-  \item{exp}{ expected values fitted by the model.}
+  \item{exp}{ expected values fitted by the model. See details.}
   \item{g}{ number of quantiles of risk, 10 by default.}
 }
 \details{
-The Hosmer-Lemeshow test is a goodness-of-fit test for binary logistic regression models which was generalised by Fagerland, Hosmer and Bofin (2008) to accommodate multinomial logistic models. \code{logitgof} is capable of performing both tests, which are decribed in Hosmer, Lemeshow and Sturdivant (2013). Essentially, they compare observed with expected frequencies and compute a test statistic which is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ.
+The Hosmer-Lemeshow test is a goodness-of-fit test for binary logistic regression models which was generalised by Fagerland, Hosmer and
+Bofin (2008) to accommodate multinomial logistic models. \code{logitgof} is capable of performing both tests, which are decribed in 
+Hosmer, Lemeshow and Sturdivant (2013). Essentially, they compare observed with expected frequencies and compute a test statistic which 
+is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and 
+the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected 
+frequencies differ.
 
-The vector of observed values passed to \code{logitgof} can be either a factor with a number of levels or a vector coded 1/0. If \code{obs} is a factor with three or more levels, the multinomial version of the test is run. If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then the binary version of the test is run.
+The vector of observed values passed to \code{logitgof} can be either a factor with a number of levels or a vector coded 1/0. If 
+\code{obs} is a factor with three or more levels, the multinomial version of the test is run. If \code{obs} is a vector of 1s and 0s 
+or a factor vector with 2 levels, then the binary version of the test is run.
+
+The expected values passed to \code{exp} can be generated using the \code{fitted()} function. If you are using the \code{mlogit} 
+package to run your model, ensure you set \code{outcome = FALSE} in the \code{fitted()} function. See examples.
 }
 \value{
 A list of class \code{htest} containing:
@@ -54,5 +64,15 @@ ml$f2 <- 1
 ml[ml$female=="male", ]$f2 <- 0
 m3 <- glm(f2 ~ ses + write, data=ml, family="binomial")
 logitgof(ml$f2, fitted(m3))
+
+\dontrun{
+# If using the mlogit package, ensure you set outcome = FALSE when running the fitted() function
+library(mlogit)
+data("Fishing", package = "mlogit")
+Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+head(Fish)
+m <- mlogit(mode ~ 0 | income, data = Fish)
+logitgof(Fishing$mode, fitted(m, outcome = F))
+}
 }
 \keyword{regression}

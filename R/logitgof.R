@@ -22,9 +22,11 @@ function (obs, exp, g = 10)
         dfobs <- data.frame(obs, cutyhats)
         dfobsmelt <- melt(dfobs, id.vars = 2)
         observed <- cast(dfobsmelt, cutyhats ~ value, length)
+        observed <- observed[order(c(1, names(observed[, 2:ncol(observed)])))]
         dfexp <- data.frame(yhat, cutyhats)
         dfexpmelt <- melt(dfexp, id.vars = ncol(dfexp))
         expected <- cast(dfexpmelt, cutyhats ~ variable, sum)
+        expected <- expected[order(c(1, names(expected[, 2:ncol(expected)])))]
         chisq <- sum((observed[, 2:ncol(observed)] - expected[, 
             2:ncol(expected)])^2/expected[, 2:ncol(expected)])
         PARAMETER <- (g - 2) * (ncol(yhat) - 1)
