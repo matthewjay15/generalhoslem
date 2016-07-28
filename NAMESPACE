@@ -1,3 +1,5 @@
 exportPattern("^[[:alpha:]]+")
-importFrom(stats, pchisq, quantile, xtabs, contrasts)
+importFrom(stats, pchisq, quantile, xtabs, median, predict, fitted, update)
 importFrom(reshape, melt, cast)
+importFrom(epiR, epi.cp)
+importFrom(MASS, polr)
