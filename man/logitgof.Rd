@@ -33,6 +33,7 @@ A list of class \code{htest} containing:
 \item{data.name}{ a character string containing the names of the data passed to \code{obs} and \code{exp}.}
 \item{observed}{ a table of observed frequencies with \code{g} rows. Either an \code{xtabs} generated table (used in the binary version) or a \code{cast} generated data frame (multinomial version).}
 \item{expected}{ a table of expected frequencies with \code{g} rows. Either an \code{xtabs} generated table or a \code{cast} generated data frame.}
+\item{stddiffs}{ a table of the standardised differences. See Hosmer, Lemeshow and Sturdivant (2013), p 162.}
 }
 \references{
 \itemize{
