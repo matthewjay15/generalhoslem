@@ -25,7 +25,7 @@ function(model, g = NULL) {
   }
   oldmodel$model <- cbind(oldmodel$model, cutyhats = dfobs$cutyhats)
   oldmodel$model$grp <- as.factor(vapply(oldmodel$model$cutyhats, function(x) which(observed[, 1] == x), 1))
-  newmodel <- update(oldmodel, . ~ . + grp, data = oldmodel$model)
+  newmodel <- update(oldmodel, . ~ . + grp, data = oldmodel$model) # ADD STOP HERE IF RANK DEFICIENT
   if (class(oldmodel) == "polr") {
     LRstat <- oldmodel$deviance - newmodel$deviance
   } else if (class(oldmodel) == "clm") {
