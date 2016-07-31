@@ -7,7 +7,7 @@
   \item{obs}{ a vector of observed values. See details.}
   \item{exp}{ expected values fitted by the model. See details.}
   \item{g}{ number of quantiles of risk, 10 by default.}
-  \item{ord}{ logical indcating whether to run the ordinal version, FALSE by default.}
+  \item{ord}{ logical indicating whether to run the ordinal version, FALSE by default.}
 }
 \details{
 \bold{The Hosmer-Lemeshow tests}
