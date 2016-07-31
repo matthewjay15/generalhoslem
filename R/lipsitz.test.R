@@ -29,7 +29,7 @@ function(model, g = NULL) {
   if (class(oldmodel) == "polr") {
     LRstat <- oldmodel$deviance - newmodel$deviance
   } else if (class(oldmodel) == "clm") {
-    LRstat <- abs(-2 * ((newmodel$deviance / -2) - oldmodel$logLik))
+    LRstat <- abs(-2 * (newmodel$logLik - oldmodel$logLik))
   }
   PARAMETER <- g - 1
   PVAL <- 1 - pchisq(LRstat, PARAMETER)
