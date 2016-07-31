@@ -43,6 +43,6 @@ mtcars$gear <- as.factor(mtcars$gear) # Outcome must be converted to factor
                                       # before fitting model otherwise 
                                       # lipsitz.test() will fail.
 mod1 <- polr(gear ~ mpg + cyl, data = mtcars)
-#lipsitz.test(mod1) # displays warning as n/5c < 6.
+lipsitz.test(mod1) # displays warning as n/5c < 6.
 }
 \keyword{regression}
