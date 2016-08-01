@@ -1,20 +1,21 @@
 lipsitz.test <-
-function(model, g = NULL) {
+  function (model, g = NULL)  {
   oldmodel <- model
   if (class(oldmodel) == "polr") {
     yhat <- as.data.frame(fitted(oldmodel))
   } else if (class(oldmodel) == "clm") {
     predprob <- oldmodel$model[, 2:ncol(oldmodel$model)]
-    yhat <- predict(oldmodel, newdata = predprob, type = "prob")$fit
+    yhat <- as.data.frame(predict(oldmodel, newdata = predprob, type = "prob")$fit)
   } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(oldmodel$terms)
   DNAME <- paste("formula: ", deparse(formula))
   METHOD <- "Lipsitz goodness of fit test for ordinal response models"
   obs <- oldmodel$model[1]
   if (is.null(g)) {
-    g <- round(nrow(obs) / (5 * ncol(yhat)))
-    if (g < 6) warning("n/5c < 6. Running this test when n/5c < 6 is not recommended.")
-  }  
+    g <- round(nrow(obs)/(5 * ncol(yhat)))
+    if (g < 6) 
+      warning("n/5c < 6. Running this test when n/5c < 6 is not recommended.")
+  }
   qq <- unique(quantile(1 - yhat[, 1], probs = seq(0, 1, 1/g)))
   cutyhats <- cut(1 - yhat[, 1], breaks = qq, include.lowest = TRUE)
   dfobs <- data.frame(obs, cutyhats)
@@ -24,18 +25,19 @@ function(model, g = NULL) {
     warning(paste("Not possible to compute", g, "rows. There might be too few observations."))
   }
   oldmodel$model <- cbind(oldmodel$model, cutyhats = dfobs$cutyhats)
-  oldmodel$model$grp <- as.factor(vapply(oldmodel$model$cutyhats, function(x) which(observed[, 1] == x), 1))
+  oldmodel$model$grp <- as.factor(vapply(oldmodel$model$cutyhats, 
+                                         function(x) which(observed[, 1] == x), 1))
   newmodel <- update(oldmodel, . ~ . + grp, data = oldmodel$model)
   if (class(oldmodel) == "polr") {
     LRstat <- oldmodel$deviance - newmodel$deviance
   } else if (class(oldmodel) == "clm") {
-    LRstat <- abs(-2 * ((newmodel$deviance / -2) - oldmodel$logLik))
+    LRstat <- abs(-2 * (newmodel$logLik - oldmodel$logLik))
   }
   PARAMETER <- g - 1
   PVAL <- 1 - pchisq(LRstat, PARAMETER)
   names(LRstat) <- "LR statistic"
   names(PARAMETER) <- "df"
   structure(list(statistic = LRstat, parameter = PARAMETER, 
-                 p.value = PVAL, method = METHOD, data.name = DNAME,
-                 newmoddata = oldmodel$model, predictedprobs = yhat), class = "htest")  
+                 p.value = PVAL, method = METHOD, data.name = DNAME, newmoddata = oldmodel$model, 
+                 predictedprobs = yhat), class = "htest")
 }
