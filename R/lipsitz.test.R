@@ -5,7 +5,7 @@ function(model, g = NULL) {
     yhat <- as.data.frame(fitted(oldmodel))
   } else if (class(oldmodel) == "clm") {
     predprob <- oldmodel$model[, 2:ncol(oldmodel$model)]
-    yhat <- predict(oldmodel, newdata = predprob, type = "prob")$fit
+    yhat <- as.data.frame(predict(model, newdata = predprob, type = "prob")$fit)
   } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(oldmodel$terms)
   DNAME <- paste("formula: ", deparse(formula))
