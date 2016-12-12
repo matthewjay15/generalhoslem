@@ -11,7 +11,7 @@
 }
 \details{
 \bold{The Hosmer-Lemeshow tests}
-The Hosmer-Lemeshow tests goodness-of-fit tests for binary, multinomial and ordinal logistic regression models. \code{logitgof} is capable of performing all three tests. Essentially, they compare observed with expected frequencies and compute a test statistic which is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ.
+The Hosmer-Lemeshow tests are goodness of fit tests for binary, multinomial and ordinal logistic regression models. \code{logitgof} is capable of performing all three. Essentially, they compare observed with expected frequencies and compute a test statistic which is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ.
 
 \bold{Binary version}
 If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then the binary version of the test is run. \code{exp} must be the fitted values obtained from the model, which can be accessed using the \code{fitted} function.
@@ -22,7 +22,7 @@ If \code{obs} is a factor with three or more levels and \code{ord = FALSE}, the 
 \bold{Ordinal version}
 If \code{obs} is a factor with three or more levels and \code{ord = TRUE}, the ordinal version of the test is run. See examples for how to extract fitted values from models constructed using \code{polr} in package \code{MASS} or \code{clm} in \code{ordinal}.
 
-Note that Fagerland and Hosmer recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
+Note that Fagerland and Hosmer (2016) recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
 }
 \value{
 A list of class \code{htest} containing:
@@ -33,6 +33,7 @@ A list of class \code{htest} containing:
 \item{data.name}{ a character string containing the names of the data passed to \code{obs} and \code{exp}.}
 \item{observed}{ a table of observed frequencies with \code{g} rows. Either an \code{xtabs} generated table (used in the binary version) or a \code{cast} generated data frame (multinomial version).}
 \item{expected}{ a table of expected frequencies with \code{g} rows. Either an \code{xtabs} generated table or a \code{cast} generated data frame.}
+\item{stddiffs}{ a table of the standardised differences. See Hosmer, Lemeshow and Sturdivant (2013), p 162.}
 }
 \references{
 \itemize{
