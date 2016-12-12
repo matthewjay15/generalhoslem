@@ -34,7 +34,7 @@ function(model, catvars) {
     warning("At least one cell in the expected frequencies table is < 1. Chi-square approximation may be incorrect.")
   deviancetable <- observed[, 2:ncol(observed)] * log(observed[, 2:ncol(observed)] / expected[, 2:ncol(expected)])
   deviancetable <- replace(deviancetable, is.na(deviancetable), 0)
-  deviancesq <- sum(deviancetable)
+  deviancesq <- 2*sum(deviancetable)
   I2 <- nrow(observed)
   J <- length(levels(as.factor(model$model[, 1])))
   k <- length(catvars)
