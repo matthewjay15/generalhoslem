@@ -1,20 +1,20 @@
 \name{logitgof}
 \alias{logitgof}
 \title{Hosmer-Lemeshow Tests for Logistic Regression Models}
-\description{Performs the Hosmer and Lemeshow goodness-of-fit tests for binary, multinomial and ordinal regression models.}
+\description{Performs the Hosmer and Lemeshow goodness of fit tests for binary, multinomial and ordinal logistic regression models.}
 \usage{logitgof(obs, exp, g = 10, ord = FALSE)}
 \arguments{
   \item{obs}{ a vector of observed values. See details.}
   \item{exp}{ expected values fitted by the model. See details.}
   \item{g}{ number of quantiles of risk, 10 by default.}
-  \item{ord}{ logical indcating whether to run the ordinal version, FALSE by default.}
+  \item{ord}{ logical indicating whether to run the ordinal version, FALSE by default.}
 }
 \details{
 \bold{The Hosmer-Lemeshow tests}
 The Hosmer-Lemeshow tests are goodness of fit tests for binary, multinomial and ordinal logistic regression models. \code{logitgof} is capable of performing all three. Essentially, they compare observed with expected frequencies and compute a test statistic which is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ.
 
 \bold{Binary version}
-If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then the binary version of the test is run. \code{exp} must be the fitted values obtained from the model, which can be accessed using the \code{fitted} function.
+If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then the binary version of the test is run. \code{exp} must be the fitted values obtained from the model, which can be accessed using the \code{fitted()} function.
 
 \bold{Multinomial version}
 If \code{obs} is a factor with three or more levels and \code{ord = FALSE}, the multinomial version of the test is run. If  using the \code{mlogit} package to run a model, ensure \code{outcome = FALSE} in the \code{fitted()} function. See examples.
@@ -22,7 +22,7 @@ If \code{obs} is a factor with three or more levels and \code{ord = FALSE}, the 
 \bold{Ordinal version}
 If \code{obs} is a factor with three or more levels and \code{ord = TRUE}, the ordinal version of the test is run. See examples for how to extract fitted values from models constructed using \code{polr} in package \code{MASS} or \code{clm} in \code{ordinal}.
 
-Note that Fagerland and Hosmer (2016) recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
+Note that Fagerland and Hosmer recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
 }
 \value{
 A list of class \code{htest} containing:
@@ -37,7 +37,7 @@ A list of class \code{htest} containing:
 }
 \references{
 \itemize{
-\item Fagerland MW, Hosmer DW, Bofin AM. Multinomial goodness-of-fit tests for logistic regression models. Statistics in medicine 2008;27(21):4238-53.
+\item Fagerland MW, Hosmer DW, Bofin AM. Multinomial goodness-of-fit tests for logistic regression models. Statistics in Medicine 2008;27(21):4238-53.
 \item Fagerland MW, Hosmer DW. A goodness-of-fit test for the proportional odds regression model. Statistics in Medicine 2013;32:2235-2249.
 \item Fagerland MW, Hosmer DW. Tests for goodness of fit in ordinal logistic regression models. Journal of Statistical Computation and Simulation 2016. DOI: 10.1080/00949655.2016.1156682.
 \item Hosmer DW, Lemeshow S, Sturdivant RX. Applied Logistic Regression, 3rd Edition. 2013. New York, USA: John Wiley and Sons.
@@ -48,6 +48,8 @@ A list of class \code{htest} containing:
 \code{\link{lipsitz.test}}, \code{\link{pulkrob.chisq}}.
 }
 \examples{
+### The mtcars dataset is a terrible example to use due to its small
+### size - some of the models will return warnings as a result.
 ## Binary model
 # 1/0 coding
 data(mtcars)
