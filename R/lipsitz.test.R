@@ -1,21 +1,18 @@
-function (model, g = 10) {
+lipsitz.test <-
+function (model, g = 10)  {
   oldmodel <- model
   if (class(oldmodel) == "polr") {
     yhat <- as.data.frame(fitted(oldmodel))
   } else if (class(oldmodel) == "clm") {
     predprob <- oldmodel$model[, 2:ncol(oldmodel$model)]
-    yhat <- as.data.frame(predict(oldmodel, newdata = predprob, 
-                                  type = "prob")$fit)
-  }
-  else warning("Model is not of class polr or clm. Test may fail.")
+    yhat <- as.data.frame(predict(oldmodel, newdata = predprob, type = "prob")$fit)
+  } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(oldmodel$terms)
   DNAME <- paste("formula: ", deparse(formula))
   METHOD <- "Lipsitz goodness of fit test for ordinal response models"
   obs <- oldmodel$model[1]
-  if (g < 6) 
-    warning("g < 6. Running this test when g < 6 is not recommended.")
-  if (g >= nrow(obs)/(5 * ncol(yhat))) 
-    warning("g >= n/5c. Running this test when g >= n/5c is not recommended.")
+  if (g < 6) warning("g < 6. Running this test when g < 6 is not recommended.")
+  if (g >= nrow(obs) / (5 * ncol(yhat))) warning("g >= n/5c. Running this test when g >= n/5c is not recommended.")
   qq <- unique(quantile(1 - yhat[, 1], probs = seq(0, 1, 1/g)))
   cutyhats <- cut(1 - yhat[, 1], breaks = qq, include.lowest = TRUE)
   dfobs <- data.frame(obs, cutyhats)
