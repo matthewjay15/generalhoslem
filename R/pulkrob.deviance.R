@@ -1,10 +1,10 @@
-function (model, catvars) {
+pulkrob.deviance <-
+function(model, catvars) {
   if (class(model) == "polr") {
     yhat <- as.data.frame(fitted(model))
   } else if (class(model) == "clm") {
     predprob <- model$model[, 2:ncol(model$model)]
-    yhat <- as.data.frame(predict(model, newdata = predprob, 
-                                  type = "prob")$fit)
+    yhat <- as.data.frame(predict(model, newdata = predprob, type = "prob")$fit)
   } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(model$terms)
   DNAME <- paste("formula: ", deparse(formula))
@@ -12,16 +12,15 @@ function (model, catvars) {
   covars <- model$model[-1]
   covars <- covars[names(covars) %in% catvars]
   covpat <- epi.cp(covars)
-  yhat$score <- apply(sapply(1:ncol(yhat), function(i) {
-    yhat[, i] * i
-  }), 1, sum)
-  yhat <- cbind(id = 1:nrow(yhat), yhat, covpat = covpat$id)
-  medians <- cbind(covpat = covpat$cov.pattern$id, med = sapply(covpat$cov.pattern$id, 
-                                                                function(x) median(yhat[yhat$covpat == x, ]$score)))
+  yhat$score <- apply(sapply(1:ncol(yhat), function(i) { yhat[, i] * i }), 1, sum)
+  yhat <- cbind(id=1:nrow(yhat), yhat, covpat=covpat$id)
+  medians <- cbind(covpat=covpat$cov.pattern$id,
+                   med=sapply(covpat$cov.pattern$id, function(x) median(yhat[yhat$covpat==x, ]$score)))
   yhat <- merge(x = yhat, y = medians, by = "covpat", all.x = TRUE)
-  yhat$covpatsplit <- sapply(1:nrow(yhat), function(i) ifelse(yhat[i, ]$score <= yhat[i, ]$med, paste0(yhat[i, ]$covpat, "a"), 
+  yhat$covpatsplit <- sapply(1:nrow(yhat), function(i) ifelse(yhat[i, ]$score <= yhat[i, ]$med,
+                                                              paste0(yhat[i, ]$covpat, "a"),
                                                               paste0(yhat[i, ]$covpat, "b")))
-  dfobs <- cbind(id = 1:nrow(model$model), model$model[1])
+  dfobs <- cbind(id=1:nrow(model$model), model$model[1])
   dfobs <- merge(x = dfobs, y = yhat[, c("id", "covpatsplit")], by = "id", all.x = TRUE)
   dfobsmelt <- melt(dfobs[, -1], id.vars = "covpatsplit")
   observed <- cast(dfobsmelt, covpatsplit ~ value, length)
@@ -30,11 +29,11 @@ function (model, catvars) {
   dfexpmelt <- melt(dfexp, id.vars = ncol(dfexp))
   expected <- cast(dfexpmelt, covpatsplit ~ variable, sum)
   expected <- expected[order(c(1, names(expected[, 2:ncol(expected)])))]
-  stddiffs <- abs(observed[, 2:ncol(observed)] - expected[, 2:ncol(expected)])/sqrt(expected[, 2:ncol(expected)])
-  if (any(expected[, 2:ncol(expected)] < 1)) 
+  stddiffs <- abs(observed[, 2:ncol(observed)] - expected[, 2:ncol(expected)]) / sqrt(expected[, 2:ncol(expected)])
+  if (any(expected[, 2:ncol(expected)] < 1))
     warning("At least one cell in the expected frequencies table is < 1. Chi-square approximation may be incorrect.")
-  deviancetable <- observed[, 2:ncol(observed)] * log(observed[,  2:ncol(observed)]/expected[, 2:ncol(expected)])
-  deviancetable <- replace(deviancetable, is.na(deviancetable),  0)
+  deviancetable <- observed[, 2:ncol(observed)] * log(observed[, 2:ncol(observed)] / expected[, 2:ncol(expected)])
+  deviancetable <- replace(deviancetable, is.na(deviancetable), 0)
   deviancesq <- 2*sum(deviancetable)
   I2 <- nrow(observed)
   J <- length(levels(as.factor(model$model[, 1])))
