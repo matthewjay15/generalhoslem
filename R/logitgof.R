@@ -1,5 +1,4 @@
-logitgof <-
-function (obs, exp, g = 10, ord = FALSE) {
+logitgof <- function (obs, exp, g = 10, ord = FALSE) {
   DNAME <- paste(deparse(substitute(obs)), deparse(substitute(exp)), sep = ", ")
   yhat <- exp
   if (is.null(ncol(yhat))) {
@@ -40,6 +39,7 @@ function (obs, exp, g = 10, ord = FALSE) {
       } else {
         PARAMETER <- (nrow(expected) - 2) * (ncol(yhat) - 1) + ncol(yhat) - 2
       }
+    ### need to add a check that number of groups >= number of covariate patterns
   } else {
     METHOD <- "Hosmer and Lemeshow test (binary model)"
     if (is.factor(obs)) {
