@@ -1,7 +1,7 @@
 \name{logitgof}
 \alias{logitgof}
 \title{Hosmer-Lemeshow Tests for Logistic Regression Models}
-\description{Performs the Hosmer and Lemeshow goodness of fit tests for binary, multinomial and ordinal logistic regression models.}
+\description{Performs the Hosmer-Lemeshow goodness of fit tests for binary, multinomial and ordinal logistic regression models.}
 \usage{logitgof(obs, exp, g = 10, ord = FALSE)}
 \arguments{
   \item{obs}{ a vector of observed values. See details.}
@@ -11,7 +11,7 @@
 }
 \details{
 \bold{The Hosmer-Lemeshow tests}
-The Hosmer-Lemeshow tests are goodness of fit tests for binary, multinomial and ordinal logistic regression models. \code{logitgof} is capable of performing all three. Essentially, they compare observed with expected frequencies and compute a test statistic which is roughly distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ.
+The Hosmer-Lemeshow tests are goodness of fit tests for binary, multinomial and ordinal logistic regression models. \code{logitgof} is capable of performing all three. Essentially, they compare observed with expected frequencies of the outcome and compute a test statistic which is distributed according to the chi-squared distribution. The degrees of freedom depend upon the number of quantiles used and the number of outcome categories. A non-significant p value indicates that there is no evidence that the observed and expected frequencies differ (i.e., evidence of good fit).
 
 \bold{Binary version}
 If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then the binary version of the test is run. \code{exp} must be the fitted values obtained from the model, which can be accessed using the \code{fitted()} function.
@@ -20,9 +20,9 @@ If \code{obs} is a vector of 1s and 0s or a factor vector with 2 levels, then th
 If \code{obs} is a factor with three or more levels and \code{ord = FALSE}, the multinomial version of the test is run. If  using the \code{mlogit} package to run a model, ensure \code{outcome = FALSE} in the \code{fitted()} function. See examples.
 
 \bold{Ordinal version}
-If \code{obs} is a factor with three or more levels and \code{ord = TRUE}, the ordinal version of the test is run. See examples for how to extract fitted values from models constructed using \code{polr} in package \code{MASS} or \code{clm} in \code{ordinal}.
+If \code{obs} is a factor with three or more levels and \code{ord = TRUE}, the ordinal version of the test is run. See examples for how to extract fitted values from models constructed using \code{MASS::polr} or \code{oridinal::clm}.
 
-Note that Fagerland and Hosmer recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
+Note that Fagerland and Hosmer (2016) recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
 }
 \value{
 A list of class \code{htest} containing:
@@ -43,7 +43,7 @@ A list of class \code{htest} containing:
 \item Hosmer DW, Lemeshow S, Sturdivant RX. Applied Logistic Regression, 3rd Edition. 2013. New York, USA: John Wiley and Sons.
 }
 }
-\author{Matthew Alexander Jay, with code adapted from the \code{hoslem.test} function written by Peter Solymos for the \code{ResourceSelection} package.}
+\author{Matthew Alexander Jay, with code adapted from \code{ResourceSelection::hoslem.test} by Peter Solymos.}
 \seealso{
 \code{\link{lipsitz.test}}, \code{\link{pulkrob.chisq}}.
 }
