@@ -4,7 +4,7 @@ function (model, g = 10)  {
   if (class(oldmodel) == "polr") {
     yhat <- as.data.frame(fitted(oldmodel))
   } else if (class(oldmodel) == "clm") {
-    predprob <- oldmodel$model[, 2:ncol(oldmodel$model)]
+    predprob <- oldmodel$model[, 2:ncol(oldmodel$model), drop = F]
     yhat <- as.data.frame(predict(oldmodel, newdata = predprob, type = "prob")$fit)
   } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(oldmodel$terms)
