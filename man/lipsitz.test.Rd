@@ -44,5 +44,9 @@ mtcars$gear <- as.factor(mtcars$gear) # Outcome must be converted to factor
                                       # lipsitz.test() will fail.
 mod1 <- polr(gear ~ mpg + cyl, data = mtcars)
 lipsitz.test(mod1)
+  
+library(ordinal)
+mod2 <- clm(gear ~ mpg, data = mtcars)
+lipsitz.test(mod2)
 }
 \keyword{regression}
