@@ -31,7 +31,7 @@ pulkrob.chisq <- function(model, catvars) {
   if (class(model) == "polr") {
     yhat <- as.data.frame(fitted(model))
   } else if (class(model) == "clm") {
-    predprob <- model$model[, 2:ncol(model$model)]
+    predprob <- model$model[, 2:ncol(model$model), drop = F]
     yhat <- as.data.frame(predict(model, newdata = predprob, type = "prob")$fit)
   } else warning("Model is not of class polr or clm. Test may fail.")
   formula <- formula(model$terms)
