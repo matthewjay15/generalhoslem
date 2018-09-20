@@ -51,11 +51,13 @@ pulkrob.deviance <- function(model, catvars) {
   dfobs <- cbind(id=1:nrow(model$model), model$model[1])
   dfobs <- merge(x = dfobs, y = yhat[, c("id", "covpatsplit")], by = "id", all.x = TRUE)
   dfobsmelt <- melt(dfobs[, -1], id.vars = "covpatsplit")
+  observed <- cast(dfobsmelt, covpatsplit ~ value, length)
   observed.cols <- observed[, names(observed[, 2:ncol(observed)])]
   observed.cols <- observed.cols[order(names(observed[, 2:ncol(observed)]))]
   observed <- cbind(covatsplit = observed[, 1], observed.cols)
   dfexp <- yhat[, !colnames(yhat) %in% c("id", "covpat", "med", "score")]
   dfexpmelt <- melt(dfexp, id.vars = ncol(dfexp))
+  expected <- cast(dfexpmelt, covpatsplit ~ variable, sum)                             
   expected.cols <- expected[, names(expected[, 2:ncol(expected)])]
   expected.cols <- expected.cols[order(names(expected[, 2:ncol(expected)]))]
   expected <- cbind(covatsplit = expected[, 1], expected.cols)
