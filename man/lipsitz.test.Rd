@@ -8,7 +8,7 @@
   \item{g}{ number of quantiles of risk, defaults to 10.}
 }
 \details{
-The Lipsitz test is a goodness of fit test for ordinal response logistic regression models. It involves firstly binning the observed data into percentiles in the same manner as for the multinomial Hosmer-Lemeshow test. Strictly speaking, the Lipsitz test first requires an ordinal score be assigned to each subject. This score is the sum of the predicted probabilities for each outcome level within each subject multiplied by equally spaced integer weights. This, however, has been shown to be idenitical to the more straightforward binning method (Fagerland and Hosmer, 2013). The user can specify the number of groups by assigning an integer value to \code{g}, which is 10 by default.
+The Lipsitz test is a goodness of fit test for ordinal response logistic regression models. It involves binning the observed data into equally sized \code{g} groups based on an ordinal response score. This score is computed by summing the predicted probabilities of each subject for each outcome level multiplied by equally spaced integer weights. The user can specify the number of groups by assigning an integer value to \code{g}, which is 10 by default.
 
 Given this partitioning of the data, dummy variables, \code{I}, are derived such that, for each group, \code{I = 1} if the subject is in region \code{g} and \code{I = 0} if not. The model is then re-fit with these dummy variables. If the model has good fit, then the coefficients for all these dummy variables simultaneously = 0. Lipsitz et al (1996) suggest that likelihood ratio, Wald or score tests can be used; \code{lipsitz.test} just uses the likelihood ratio test with \code{g-1} degrees of freedom.
 
