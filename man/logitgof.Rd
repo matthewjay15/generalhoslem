@@ -22,7 +22,9 @@ If \code{obs} is a factor with three or more levels and \code{ord = FALSE}, the 
 \bold{Ordinal version}
 If \code{obs} is a factor with three or more levels and \code{ord = TRUE}, the ordinal version of the test is run. See examples for how to extract fitted values from models constructed using \code{MASS::polr} or \code{oridinal::clm}.
 
-Note that Fagerland and Hosmer (2016) recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
+Note that Fagerland and Hosmer (2013) point out that the model needs to have at least as many covariate patterns as groups. This is achieved easily where there are continuous predictors or several categorical variables. This test will not be valid where there is only one or two categorical predictor variables. Fagerland and Hosmer (2016) also recommend running the Hosmer-Lemeshow test for ordinal models alongisde the Lipsitz test (\code{lipsitz.test}) and Pulkstenis-Robinson tests (\code{pulkrob.chisq} and \code{pulkrob.deviance}), as each detects different types of lack of fit.
+  
+Finally, it has been observed that the results from this implementation of the ordinal Hosmer-Lemeshow test and the Lipsitz test are slightly different from the Fagerland and Hosmer (2017) Stata implementation. It is not not yet clear why this is but is under investigation. The discrepancy is ver minor.
 }
 \value{
 A list of class \code{htest} containing:
@@ -40,6 +42,7 @@ A list of class \code{htest} containing:
 \item Fagerland MW, Hosmer DW, Bofin AM. Multinomial goodness-of-fit tests for logistic regression models. Statistics in Medicine 2008;27(21):4238-53.
 \item Fagerland MW, Hosmer DW. A goodness-of-fit test for the proportional odds regression model. Statistics in Medicine 2013;32:2235-2249.
 \item Fagerland MW, Hosmer DW. Tests for goodness of fit in ordinal logistic regression models. Journal of Statistical Computation and Simulation 2016. DOI: 10.1080/00949655.2016.1156682.
+\item Fagerland MW, Hosmer DW. How to test for goodness of fit in ordinal logistic regression models. The Stata Journal 2017;17(3):668-686.
 \item Hosmer DW, Lemeshow S, Sturdivant RX. Applied Logistic Regression, 3rd Edition. 2013. New York, USA: John Wiley and Sons.
 }
 }
