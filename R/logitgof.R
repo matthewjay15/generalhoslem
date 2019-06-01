@@ -1,6 +1,6 @@
 logitgof <- function (obs, exp, g = 10, ord = FALSE) {
   DNAME <- paste(deparse(substitute(obs)), deparse(substitute(exp)), sep = ", ")
-  yhat <- exp
+  yhat <- as.data.frame(exp)
   if (is.null(ncol(yhat))) {
     mult <- FALSE
   } else {
@@ -12,21 +12,31 @@ logitgof <- function (obs, exp, g = 10, ord = FALSE) {
   if (mult) {
     if (!ord) {
       METHOD <- "Hosmer and Lemeshow test (multinomial model)"
+      qq <- unique(quantile(1 - yhat[, 1], probs = seq(0, 1, 1/g)))
+      cutyhats <- cut(1 - yhat[, 1], breaks = qq, include.lowest = TRUE)
     } else {
       METHOD <- "Hosmer and Lemeshow test (ordinal model)"
+      yhat$score <- apply(sapply(1:ncol(yhat), function(i) {
+        yhat[, i] * i
+      }), 1, sum)
+      yhat$tmp <- 1:nrow(yhat)
+      yhat <- yhat[order(yhat$score), ]
+      cutyhats <- cut(1:nrow(yhat), breaks = g, include.lowest = T)
+      cutyhats <- cutyhats[order(yhat$tmp)]
+      yhat <- yhat[order(yhat$tmp), ]
+      yhat$score <- NULL
+      yhat$tmp <- NULL
     }
-    qq <- unique(quantile(1 - yhat[, 1], probs = seq(0, 1, 1/g)))
-    cutyhats <- cut(1 - yhat[, 1], breaks = qq, include.lowest = TRUE)
     dfobs <- data.frame(obs, cutyhats)
     dfobsmelt <- melt(dfobs, id.vars = 2)
     observed <- cast(dfobsmelt, cutyhats ~ value, length)
-    names(observed)[names(observed) != "cutyhats"] <- paste0("x",
-                                                             names(observed)[names(observed) != "cutyhats"])
+    names(observed)[names(observed) != "cutyhats"] <- paste0("y_", names(observed)[names(observed) != "cutyhats"])
     observed <- observed[order(c(1, names(observed[, 2:ncol(observed)])))]
     dfexp <- data.frame(yhat, cutyhats)
     dfexpmelt <- melt(dfexp, id.vars = ncol(dfexp))
     expected <- cast(dfexpmelt, cutyhats ~ variable, sum)
     expected <- expected[order(c(1, names(expected[, 2:ncol(expected)])))]
+    names(expected)[names(expected) != "cutyhats"] <- paste0("y_", names(expected)[names(expected) != "cutyhats"])
     stddiffs <- abs(observed[, 2:ncol(observed)] - expected[, 2:ncol(expected)]) / sqrt(expected[, 2:ncol(expected)])
     if (ncol(expected) != ncol(observed)) stop("Observed and expected tables have different number of columns. Check you entered the correct data.")
     if (any(expected[, 2:ncol(expected)] < 1))
@@ -35,11 +45,10 @@ logitgof <- function (obs, exp, g = 10, ord = FALSE) {
       stop("Observed or expected values < 0. Check that observed and fitted values entered correctly.")
     chisq <- sum((observed[, 2:ncol(observed)] - expected[, 2:ncol(expected)])^2 / expected[, 2:ncol(expected)])
     if (!ord) {
-        PARAMETER <- (nrow(expected) - 2) * (ncol(yhat) - 1) 
-      } else {
-        PARAMETER <- (nrow(expected) - 2) * (ncol(yhat) - 1) + ncol(yhat) - 2
-      }
-    ### need to add a check that number of groups >= number of covariate patterns
+      PARAMETER <- (nrow(expected) - 2) * (ncol(yhat) - 1) 
+    } else {
+      PARAMETER <- (nrow(expected) - 2) * (ncol(yhat) - 1) + ncol(yhat) - 2
+    }
   } else {
     METHOD <- "Hosmer and Lemeshow test (binary model)"
     if (is.factor(obs)) {
